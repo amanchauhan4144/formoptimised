@@ -1,60 +1,3 @@
-const modal = document.getElementById('locationModal');
-
-const allowBtn = document.getElementById('allowLocationBtn');
-const denyBtn = document.getElementById('denyLocationBtn');
-
-document.addEventListener('DOMContentLoaded', function() {
-  modal.style.display = 'block';
-});
-
-allowBtn.addEventListener('click', allowLocation);
-denyBtn.addEventListener('click', denyLocation);
-
-function allowLocation() {
-  modal.style.display = 'none';
-  
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(showPosition, showError);
-  } else {
-    alert('Geolocation is not supported by this browser.');
-  }
-}
-
-function denyLocation() {
-  modal.style.display = 'none';
-  
-}
-
-function showPosition(position) {
-  const latitude = position.coords.latitude;
-  const longitude = position.coords.longitude;
-  
-}
-
-function showError(error) {
-  switch(error.code) {
-    case error.PERMISSION_DENIED:
-      alert('User denied the request for Geolocation.');
-      break;
-    case error.POSITION_UNAVAILABLE:
-      alert('Location information is unavailable.');
-      break;
-    case error.TIMEOUT:
-      alert('The request to get user location timed out.');
-      break;
-    case error.UNKNOWN_ERROR:
-      alert('An unknown error occurred.');
-      break;
-  }
-}
-
-
-
-
-
-
-
-
 // real
 const steps = document.querySelectorAll(".stp");
 const circleSteps = document.querySelectorAll(".step");
@@ -73,8 +16,6 @@ const obj = {
   kind: null,
   price: null,
 };
-
-
 
 steps.forEach((step) => {
   const nextBtn = step.querySelector(".nextstp");
@@ -135,6 +76,19 @@ phoneInput.addEventListener("keypress", function(e) {
 
 // this is extra number function ending
 
+const emailInput= document.getElementById('email')
+function validateField(inputElement, regex, errorElement) {
+  const value = inputElement.value.trim();
+  const isValid = regex.test(value);
+  if (!isValid) {
+    errorElement.style.display = "block";
+    inputElement.classList.add("err");
+  } else {
+    errorElement.style.display = "none";
+    inputElement.classList.remove("err");
+  }
+  return isValid;
+}
 
 function validateForm() {
   let valid = true;
@@ -145,53 +99,11 @@ function validateForm() {
   usernameError.style.display = "none";
 
   // Email validation
-const emailInput = document.getElementById('email');
-
-  const emailValue = emailInput.value.trim();
-  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (emailValue === '') {
-    valid = false;
-    emailError.style.display = "block";
-    emailInput.classList.add("err");
-  } else if (!emailPattern.test(emailValue)) {
-    valid = false;
-    emailInput.classList.add("err");
-    emailError.style.display = "block";
-  }
-
+  valid = validateField(emailInput, /^[^\s@]+@[^\s@]+\.[^\s@]+$/, emailError) && valid;
   // Phone validation
-const phoneNumberField = document.getElementById('phone');
-
-  const phoneNumberValue = phoneNumberField.value.trim();
-  const phonePattern = /^\d{10}$/;
-  if (phoneNumberValue === '') {
-    valid = false;
-    phoneError.style.display = "block";
-    phoneNumberField.classList.add("err");
-  } else if (!phonePattern.test(phoneNumberValue)) {
-    valid = false;
-    phoneNumberField.classList.add("err");
-    phoneError.style.display = "block";
-  }
-
+  valid = validateField(phoneInput, /^\d{10}$/, phoneError) && valid;
   // Username validation
-const nameInput = document.getElementById('name');
-
-  const usernameValue = nameInput.value.trim();
-  const usernameRegex = /^[A-Za-z\s]+$/;
-  if (usernameValue === '') {
-    valid = false;
-    usernameError.style.display = "block";
-    nameInput.classList.add("err");
-  } else if (!usernameRegex.test(usernameValue)) {
-    valid = false;
-    nameInput.classList.add("err");
-    usernameError.style.display = "block";
-  }
-
-
-
-
+  valid = validateField(nameInput, /^[A-Za-z\s]+$/, usernameError) && valid;
   // Other form inputs validation
   for (let i = 0; i < formInputs.length; i++) {
     if (!formInputs[i].value) {
@@ -203,98 +115,8 @@ const nameInput = document.getElementById('name');
       findLabel(formInputs[i]).nextElementSibling.style.display = "none";
     }
   }
-
   return valid;
 }
-
-
-// validation starts
-// const nameInput = document.getElementById('name');
-// nameInput.addEventListener('keydown', validateName);
-// function validateName(event) {
-//   const nameValue = nameInput.value.trim();
-//   const nameRegex = /^[A-Za-z\s]+$/;
-
-//   const keyCode = event.keyCode || event.which; 
-//   const isNumber = (keyCode >= 48 && keyCode <= 57) || (keyCode >= 96 && keyCode <= 105); 
-//   if (isNumber) {
-//     event.preventDefault();
-//     return false;}
-//   if (!nameRegex.test(nameValue)) {
-//     nameInput.classList.add("err");
-    
-//     document.getElementById("usernameError").style.display = "block";
-//   } else {
-//     nameInput.classList.remove("err");
-//     document.getElementById("usernameError").style.display = "none";
-//     document.getElementById('errorempty').style.display = 'none';
-
-//   }
-// }
-
-
-
-// const emailInput = document.getElementById('email');
-// emailInput.addEventListener('keyup', validateEmail);
-
-// function validateEmail() {
-  
-//   const emailValue = emailInput.value;
-//   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-//   if (emailValue.trim() === '') {
-//     emailError.style.display = "block";
-//     submit.classList.add("notallowed"); 
-//   } else if (!emailPattern.test(emailValue)) {
-//     emailInput.classList.add("err");
-//     emailError.style.display = "block";
-//     submit.classList.add("notallowed"); 
- 
-
-
-//   } else {
-//     emailInput.classList.remove("err");
-//     emailError.style.display = "none"; 
-//     submit.classList.remove("notallowed"); 
-//     document.getElementById('errorempty').style.display = 'none';
-
-
-// }
-// }
-
-// const phoneNumberField = document.getElementById('phone');
-// const phoneError = document.getElementById('phoneError');
-
-// phoneNumberField.addEventListener("keypress", function(e) {
-//   const keyCodes = [48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 0, 8]; 
-
-//   if (!(keyCodes.includes(e.which))) {
-//     e.preventDefault();
-//   }
-// });
-
-// phoneNumberField.addEventListener("keyup", validatePhoneNumber);
-
-// function validatePhoneNumber(event) {
-//   const phonennumbervalue = phoneNumberField.value;
-//   const phonepattern = /^\d{10}$/;
-
-//   if (phonennumbervalue.trim() === '') {
-//     phoneError.style.display = "block";
-
-//   } else if (!phonepattern.test(phonennumbervalue)) {
-//     phoneNumberField.classList.add("invalid");
-//     phoneError.style.display = "block";
-//     submit.classList.add("notallowed");
-    
-//   } else {
-//     phoneNumberField.classList.remove("invalid");
-//     phoneError.style.display = "none";
-//     document.getElementById('errorempty').style.display = 'none';
-
-//     submit.classList.remove("notallowed");
-//   }
-// }
 
 document.getElementById('image').addEventListener('change', function() {
   var error1 = document.getElementById('errorone');
@@ -303,29 +125,13 @@ document.getElementById('image').addEventListener('change', function() {
     error1.style.display = 'none';
     error2.style.display = 'none';
     image.classList.remove("err");
-
-
-
-
   } else {
     error1.style.display = 'block';
     error2.style.display = 'block';
-
-
   }
 });
 
-
-
-
-
-
-
-
-
-
-
-// valdation ends
+// validation ends
 function findLabel(el) {
   const idVal = el.id;
   const labels = document.getElementsByTagName("label");
@@ -460,15 +266,10 @@ function saveCheckboxState() {
   const checkbox2State = document.getElementById('larger').checked;
   const checkbox3State = document.getElementById('profile').checked;
 
-
   localStorage.setItem('checkbox1State',checkbox1State );
   localStorage.setItem('checkbox2State',checkbox2State );
   localStorage.setItem('checkbox3State',checkbox3State );
 }
-
-
-
-
 //  event listener to the form element containing checkboxes for saving data
 document.getElementById('checkboxForm').addEventListener('click', (event) => {
   console.log("Checkbox state changed");
